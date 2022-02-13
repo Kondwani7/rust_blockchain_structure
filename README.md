@@ -39,7 +39,7 @@ you will be presented with 4 options, namely:
 2)Mine block
 3)Update difficulty
 4)Update reward
-5) Exit
+0) Exit
 ```
 )ption 1 allows your to send some amount to a new reciever of your choice.
 After entering the desired sender receiver addresses, and the amount,
