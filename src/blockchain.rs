@@ -47,18 +47,16 @@ impl Chain{
             miner_addr,
             reward: 100.0,
         };
-
         chain.generate_new_block();
         chain
     }
-
+    //create a new transaction
     pub fn new_transaction(&mut self, sender:String, receiver: String, amount:f32) -> bool {
         self.curr_trans.push(Transaction {
             sender,
             receiver,
             amount,
         });
-
         true
     }
     //creating the last chain of our blockchain which in the beginning doesnt exist
@@ -89,30 +87,30 @@ impl Chain{
             merkle: String::new(),
             difficulty: self.difficulty,
         };
-
+        //rewarding the transaction from the new block created
         let reward_trans = Transaction {
             sender: String::from("Root"),
             receiver: self.miner_addr.clone(),
             amount: self.reward,
         };
-
+        //creating the new block 
         let mut block = Block {
             header,
             count: 0,
             transactions: vec![]
         };
-
+        //pushing elements to the block and proof of work to add to the Chain(Blockchain)
         block.transactions.push(reward_trans);
         block.transactions.append(&mut self.curr_trans);
         block.count = block.transactions.len() as u32;
         block.header.merkle = Chain::get_merkle(block.transactions.clone());
         Chain::proof_of_work(&mut block.header);
-
+        //pushing the block to the blockchain
         println!("{:#?}", &block);
         self.chain.push(block);
         true
     }
-    //create a merkle based on the current transaction and hash
+    //add a node to the a merkle tree based on the current transaction and hash
     fn get_merkle(curr_trans: Vec<Transaction>) -> String{
         let mut merkle = Vec::new();
         //generate a hash after iterating through a transaction
@@ -133,7 +131,7 @@ impl Chain{
             let mut h2 = merkle.remove(0);
             //combine hash 1 with hash 2
             h1.push_str(&mut h2);
-            //then create a new hash based  on the combo of hash 1 and hash 2
+            //t hen create a new hash based  on the combo of hash 1 and hash 2
             let nh = Chain::hash(&h1);
             //after passing the new hash in the chain push it to the merkle
             merkle.push(nh);
